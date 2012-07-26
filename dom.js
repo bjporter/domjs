@@ -21,6 +21,7 @@ var $ = function (param) {
         isValidTag,
         documentReady = false;
 
+    //When window is fully loaded, run the callback
     if (param === document) { //Looking for DOM object
         document.ready = function (callback) {
             console.log('loading');
