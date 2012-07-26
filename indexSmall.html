@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<head>
+    <script src='dom.js'></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() { 
+            var readyStateCheckInterval = setInterval(function() {
+                console.log(document.readyState);
+                if (document.readyState === "complete") {
+                    clearInterval(readyStateCheckInterval);
+                    console.log(document.readyState);
+                    console.log($ === undefined);
+                    console.log($.htmlElementsList);
+                    $('div,a,h2');
+                }
+            }, 100);
+
+        
+        }, false); //firefox, chrome
+        
+        /*$(document).ready(function() {
+            console.log('should be finished: ' + document.readyState);
+            console.log('finished');
+            console.log(typeof($));
+            console.log($ === undefined);
+            console.log($.htmlElementsList);
+            $.htmlElementsList = [];
+            console.log($.htmlElementsList.length);            
+            $('div,a,h2');
+        });*/
+    </script>
+</head>
+<body>
+
+
+
+<p><a href="http://www.w3.org/"></a>
+<h1><span class="modulename">Selectors</span></h1>
+  <h2>W3C Candidate Recommendation 13 November 2001</h2>
+  <dl>
+    <dt>This version:
+    <dd><a href="http://www.w3.org/TR/2001/CR-css3-selectors-20011113">
+                 http://www.w3.org/TR/2001/CR-css3-selectors-20011113</a>
+    <dt>Latest version:
+    <dd><a href="http://www.w3.org/TR/css3-selectors">
+                 http://www.w3.org/TR/css3-selectors</a>
+    <dt>Previous version:
+    <dd><a href="http://www.w3.org/TR/2001/WD-css3-selectors-20010126">
+                 http://www.w3.org/TR/2001/WD-css3-selectors-20010126</a>
+    <dt><a name=editors-list></a>Editors:
+    <dd><a href="mailto:glazman@netscape.com">Daniel Glazman</a> (<span
+      class=company><a
+      href="http://www.netscape.com/">Netscape/AOL</a></span>)
+    <dd><a href="mailto:tantekc@microsoft.com">Tantek &Ccedil;elik</a> (<span
+  class=company><a href="http://www.microsoft.com/">Microsoft Corporation</a></span>)
+    <dd><a href="mailto:ian@hixie.ch">Ian Hickson</a>
+    <dd>Peter Linss (former editor, formerly of&nbsp;<span class=company><a
+  href="http://www.netscape.com/">Netscape/AOL</a></span>)
+    <dd>John Williams (former editor, <span class=company><a
+  href="http://www.quark.com/">Quark, Inc.</a></span>) 
+  </dl>
+<p class=copyright><a
+href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Copyright">Copyright</a>
+&copy;2001 <a href="http://www.w3.org/"><abbr
+title="World Wide Web Consortium">W3C</abbr></a><sup>&reg;</sup> (<a
+href="http://www.lcs.mit.edu/"><abbr
+title="Massachusetts Institute of Technology">MIT</abbr></a>, <a
+href="http://www.inria.fr/"><abbr lang=fr
+title="Institut National de Recherche en Informatique et Automatique">INRIA</abbr></a>,
+<a href="http://www.keio.ac.jp/">Keio</a>), All Rights Reserved. W3C <a
+href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#Legal_Disclaimer">liability</a>,
+<a
+href="http://www.w3.org/Consortium/Legal/ipr-notice-20000612#W3C_Trademarks">trademark</a>,
+<a
+href="http://www.w3.org/Consortium/Legal/copyright-documents-19990405">document
+use</a> and <a
+href="http://www.w3.org/Consortium/Legal/copyright-software-19980720">software
+licensing</a> rules apply.
+<hr title="Separator for header">
+</div>
+
+<h2><a name=abstract></a>Abstract</h2>
+<p><acronym title="Cascading Style Sheets">CSS</acronym> (Cascading Style Sheets) is a language for describing the rendering of
+  <acronym title="Hypertext Markup Language">HTML</acronym> and <acronym title="Extensible Markup Language">XML</acronym>
+  documents on screen, on paper, in speech, etc. To bind style properties
+  to elements in the document, CSS uses <em>selectors,</em> which are patterns
+  that match one or more elements. This document describes the selectors that are proposed
+  for CSS level 3. It includes and extends the selectors of CSS level 2. 
+<h2><a name=status></a>Status of this document</h2>
+<p>This document is one of the "modules" of the upcoming CSS3 specification. It
+  not only describes the selectors that already exist in <a
+href="#CSS1"><abbr title="CSS level 1">CSS1</abbr></a> and <a
+href="#CSS2"><abbr title="CSS level 2">CSS2</abbr></a>,
+  but also proposes new selectors for <abbr title="CSS level 3">CSS3</abbr> as well as for
+  other languages that may need them. The CSS Working Group doesn't expect that all
+  implementations of CSS3 will have to implement all selectors. Instead,
+  there will probably be a small number of variants of CSS3, so-called "profiles".
+  For example, it may be that only a profile for non-interactive user agents
+  will include all of the proposed selectors. 
+<p>This specification is being put forth as a <a href="http://www.w3.org/TR/#About">Candidate
+  Recommendation</a> by the <a href="http://www.w3.org/Style/Group">CSS Working
+  Group</a>. This document is a revision of the <a href="http://www.w3.org/TR/2001/WD-css3-selectors-20010126">Working
+  Draft dated 2001 January 26</a>, and has incorporated suggestions received
+  during last call review, comments, and further deliberations of the W3C CSS
+  Working Group.
+<p>The duration of Candidate Recommendation is expected to last approximately
+  six months (ending <strong>May, 2002</strong>). All persons are encouraged
+  to review and implement this specification and return comments to the (<a
+href="http://lists.w3.org/Archives/Public/www-style/">archived</a>) public mailing
+  list <a
+href="http://www.w3.org/Mail/Lists.html#www-style">www-style</a> (see <a href="http://www.w3.org/Mail/Request">instructions</a>).
+  W3C Members can also send comments directly to the CSS Working Group. 
+<p>Should this specification prove impossible to implement, the Working Group
+  will return the document to Working Draft status and make necessary changes.
+  Otherwise, the Working Group anticipates asking the W3C Director to advance
+  this document to Proposed Recommendation.
+<p>This is still a draft document and may be updated, replaced, or obsoleted by
+  other documents at any time. It is inappropriate to cite a W3C Candidate Recommendation
+  as other than &quot;work in progress.&quot; A list of current W3C working drafts
+  can be found at <a href="http://www.w3.org/TR">http://www.w3.org/TR</a>.<br>
+  <br>
+  This document may be available in <a
+href="http://www.w3.org/Style/css3-selectors-updates/translations">translation</a>.
+  The English version of this specification is the only normative version.
+<h2><a name=dependencies></a>Dependencies with other CSS3 Modules</h2>
+<ul>
+  <li>General Syntax
+  <li>Value Assignment, Cascade and Inheritance
+  <li>Generated Content / Markers
+  <li>User Interface
+</ul>
+<div class=subtoc>
+<h2><a name=contents>Table of contents</a></h2>
+<ul class=toc>
+  <li class=tocline2><a href="#context">1.
+  Context</a>
+  <ul>
+    <li><a href="#changesFromCSS2">1.1
+    Changes from CSS2</a> </li></ul>
+  <li class=tocline2><a href="#selectors">2.
+  Selectors</a>
+  <li class=tocline2><a href="#casesens">3.
+  Case sensitivity</a>
+  <li class=tocline2><a
+  href="#selector-syntax">4. Selector
+  syntax</a>
+  <li class=tocline2><a href="#grouping">5.
+  Groups of selectors</a>
+  <li class=tocline2><a
+  href="#simple-selectors">6. Simple
+  selectors</a>
+  <ul class=toc>
+    <li class=tocline3><a
+    href="#type-selectors">6.1 Type
+    selectors</a>
+    <ul class=toc>
+      <li class=tocline4><a
+      href="#typenmsp">6.1.1 Type selectors
+      and Namespaces</a> </li></ul>
+    <li class=tocline3><a
+    href="#universal-selector">6.2 Universal
+    selector</a>
+    <ul>
+      <li><a href="#univnmsp">6.2.1
+      Universal selector and Namespaces</a> </li></ul>
+    <li class=tocline3><a
+    href="#attribute-selectors">6.3
+    Attribute selectors</a>
+    <ul class=toc>
+      <li class=tocline4><a
+      href="#attribute-representation">6.3.1
+      Representation of attributes and attributes values</a>
+      <li><a
+      href="#attribute-substrings">6.3.2
+      Substring matching attribute selectors</a>
+      <li class=tocline4><a
+      href="#attrnmsp">6.3.3 Attribute
+      selectors and Namespaces</a>
+      <li class=tocline4><a
+      href="#def-values">6.3.4 Default
+      attribute values in DTDs</a> </li></ul>
+    <li class=tocline3><a
+    href="#class-html">6.4 Class
+    selectors</a>
+    <li class=tocline3><a
+    href="#id-selectors">6.5 ID
+    selectors</a>
+    <li class=tocline3><a
+    href="#pseudo-classes">6.6
+    Pseudo-classes</a>
+    <ul class=toc>
+      <li class=tocline4><a
+      href="#dynamic-pseudos">6.6.1 Dynamic
+      pseudo-classes</a>
+      <li class=tocline4><a
+      href="#target-pseudo">6.6.2 The
+      :target pseudo-class</a>
+      <li class=tocline4><a
+      href="#lang-pseudo">6.6.3 The :lang()
+      pseudo-class</a>
+      <li class=tocline4><a
+      href="#UIstates">6.6.4 UI element
+      states pseudo-classes</a>
+      <li class=tocline4><a
+      href="#structural-pseudos">6.6.5
+      Structural pseudo-classes</a>
+      <ul>
+        <li><a href="#root-pseudo">:root
+        pseudo-class</a>
+        <li><a
+        href="#nth-child-pseudo">:nth-child()
+        pseudo-class</a>
+        <li><a
+        href="#nth-last-child-pseudo">:nth-last-child()</a>
+
+        <li><a
+        href="#nth-of-type-pseudo">:nth-of-type()
+        pseudo-class</a>
+        <li><a
+        href="#nth-last-of-type-pseudo">:nth-last-of-type()</a>
+
+        <li><a
+        href="#first-child-pseudo">:first-child
+        pseudo-class</a>
+        <li><a
+        href="#last-child-pseudo">:last-child
+        pseudo-class</a>
+        <li><a
+        href="#first-of-type-pseudo">:first-of-type
+        pseudo-class</a>
+        <li><a
+        href="#last-of-type-pseudo">:last-of-type
+        pseudo-class</a>
+        <li><a
+        href="#only-child-pseudo">:only-child
+        pseudo-class</a>
+        <li><a
+        href="#only-of-type-pseudo">:only-of-type
+        pseudo-class</a>
+        <li><a href="#empty-pseudo">:empty
+        pseudo-class</a> </li></ul>
+      <li class=tocline4><a
+      href="#content-selectors">6.6.6
+      Content pseudo-class</a>
+      <li><a href="#negation">6.6.7 The
+      negation pseudo-class</a> </li></ul></li></ul>
+  <li><a href="#pseudo-elements">7.
+  Pseudo-elements</a>
+  <ul>
+    <li><a href="#first-line">7.1 The
+    :first-line pseudo-element</a>
+    <li><a href="#first-letter">7.2 The
+    :first-letter pseudo-element</a>
+    <li><a href="#UIfragments">7.3 UI
+    element fragments pseudo-elements</a>
+    <li><a href="#gen-content">7.4 The
+    :before and :after pseudo-elements</a> </li></ul>
+  <li class=tocline2><a
+  href="#combinators">8. Combinators</a>
+  <ul class=toc>
+    <li class=tocline3><a
+    href="#descendant-combinators">8.1
+    Descendant combinators</a>
+    <li class=tocline3><a
+    href="#child-combinators">8.2 Child
+    combinators</a>
+    <li class=tocline3><a
+    href="#adjacent-combinators">8.3
+    Adjacent sibling combinators</a>
+    <ul class=toc>
+      <li class=tocline4><a
+      href="#adjacent-d-combinators">8.3.1
+      Adjacent direct combinators</a>
+      <li class=tocline4><a
+      href="#adjacent-i-combinators">8.3.2
+      Adjacent indirect combinators</a> </li></ul></li></ul>
+  <li class=tocline2><a
+  href="#specificity">9. Calculating a
+  selector's specificity</a>
+  <li class=tocline2><a
+  href="#w3cselgrammar">10. The grammar of
+  <span class="modulename">Selectors</span></a>
+  <ul class=toc>
+    <li class=tocline3><a
+    href="#grammar">10.1 Grammar</a>
+    <li class=tocline3><a href="#lex">10.2
+    Lexical scanner</a> </li></ul>
+  <li class=tocline2><a
+  href="#downlevel">11. Namespaces and
+  Down-Level clients</a>
+  <li class=tocline2><a
+  href="#profiling">12. Profiles</a>
+  <li><a href="#Conformance">13. Conformance
+  and Requirements</a>
+  <li><a href="#Tests">14. Tests</a>
+  <li><a href="#ACKS">15.
+  Acknowledgements</a>
+  <li class=tocline2><a
+  href="#references">16. References</a> <!--<li class="tocline2"><a href="#changes">Changes from previous version</a>--></li></ul></div>
+<h2><a name=context>1. Context</a></h2>
+<p>Members of the CSS+FP Working Group proposed during the Clamart meeting to
+modularize the CSS specification. 
+<p>This modularization, and the externalization of the general syntax of CSS
+will reduce the size of the specification and allow new specifications
+to use selectors and/or CSS general syntax. For instance, behaviors or tree
+transformations. 
+<p>This specification contains its own <a
+href="#Tests">test cases</a>, one test per concept introduced in this document.
+  These tests are not full conformance tests but are intended to provide users
+  with a way to check if a part of this specification is implemented <i>ad minima</i>
+  or is not implemented at all.
+<h3><a name=changesFromCSS2></a>1.1 Changes from CSS2</h3>
+<p>The main differences between the selectors in CSS2 and those in
+ <span class="modulename">Selectors</span> are:
+<ul>
+  <li>the list of basic definitions (selector, group of selectors, simple
+  selector, etc.) has been clarified
+  <li>an optional namespace component is now allowed in type element selectors,
+  the universal selector and attribute selectors
+  <li>a new combinator
+  <li>new simple selectors including substring matching attribute selectors, and new
+  pseudo-classes
+  <li>new pseudo-elements, and introduction of the "::" convention for pseudo-elements
+  <li>a rewriting of the selectors grammar
+  <li>profiles to be added to specifications integrating <span class="modulename">Selectors</span> and
+  defining the set of selectors which is actually supported by each
+  specification
+  <li><span class="modulename">Selectors</span> are now a CSS3 Module and an independent specification.
+  Other  specifications can now refer to this document independently of CSS
+  <li>the specification now contains its own test suite. </li>
+</ul>
+<h2><a name=selectors></a>2. Selectors</h2>
+<p>A <span class="propernoun">Selector</span> represents a structure. This structure can be used
+as a condition (e.g. in a CSS rule) that determines which elements
+a selector matches in the document tree, or as a flat description of the
+HTML or XML fragment corresponding to that structure. 
+<p><span class="propernoun">Selectors</span> may range from simple element names to rich contextual
+representations. 
+<p>The following table summarizes <span class="propernoun">Selector</span> syntax: 
+<table class=selectorsreview width="100%" border=1>
+  <tbody>
+  <tr>
+    <th class=pattern>Pattern</th>
+    <th class=meaning>Meaning</th>
+    <th class=described>Described in section</th>
+    <th class=origin>First defined in CSS level</th></tr>
+  <tr>
+    <td class=pattern>*</td>
+    <td class=meaning>any element</td>
+    <td class=described><a
+      href="#universal-selector">Universal
+      selector</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E</td>
+    <td class=meaning>an element of type E</td>
+    <td class=described><a
+      href="#type-selectors">Type selector</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E[foo]</td>
+    <td class=meaning>an E element with a "foo" attribute</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E[foo="bar"]</td>
+    <td class=meaning>an E element whose "foo" attribute value is exactly
+      equal to "bar"</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E[foo~="bar"]</td>
+    <td class=meaning>an E element whose "foo" attribute value is a list of
+      space-separated values, one of which is exactly equal to "bar"</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E[foo^="bar"]</td>
+    <td class=meaning>an E element whose "foo" attribute value begins exactly
+      with the string "bar"</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E[foo$="bar"]</td>
+    <td class=meaning>an E element whose "foo" attribute value ends exactly
+      with the string "bar"</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E[foo*="bar"]</td>
+    <td class=meaning>an E element whose "foo" attribute value contains the
+      substring "bar"</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E[hreflang|="en"]</td>
+    <td class=meaning>an E element whose "hreflang" attribute has a hyphen-separated
+      list of values beginning (from the left) with "en"</td>
+    <td class=described><a
+      href="#attribute-selectors">Attribute
+      selectors</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E:root</td>
+    <td class=meaning>an E element, root of the document</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:nth-child(n)</td>
+    <td class=meaning>an E element, the n-th child of its parent</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:nth-last-child(n)</td>
+    <td class=meaning>an E element, the n-th child of its parent, counting
+      from the last one</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:nth-of-type(n)</td>
+    <td class=meaning>an E element, the n-th sibling of its type</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:nth-last-of-type(n)</td>
+    <td class=meaning>an E element, the n-th sibling of its type, counting
+      from the last one</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:first-child</td>
+    <td class=meaning>an E element, first child of its parent</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E:last-child</td>
+    <td class=meaning>an E element, last child of its parent</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:first-of-type</td>
+    <td class=meaning>an E element, first sibling of its type</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:last-of-type</td>
+    <td class=meaning>an E element, last sibling of its type</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:only-child</td>
+    <td class=meaning>an E element, only child of its parent</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:only-of-type</td>
+    <td class=meaning>an E element, only sibling of its type</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:empty</td>
+    <td class=meaning>an E element that has no children (including text
+    nodes)</td>
+    <td class=described><a
+      href="#structural-pseudos">Structural
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:link <br>E:visited</td>
+    <td class=meaning>an E element being the source anchor of a hyperlink of
+      which the target is not yet visited (:link) or already visited
+    (:visited)</td>
+    <td class=described><a
+      href="#link">The link
+      pseudo-classes</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E:active <br>E:hover <br>E:focus</td>
+    <td class=meaning>an E element during certain user actions</td>
+    <td class=described><a
+      href="#useraction-pseudos">The user
+      action pseudo-classes</a></td>
+    <td class=origin>1 and 2</td></tr>
+  <tr>
+    <td class=pattern>E:target</td>
+    <td class=meaning>an E element being the target of the referring URI</td>
+    <td class=described><a
+      href="#target-pseudo">The target
+      pseudo-class</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:lang(fr)</td>
+    <td class=meaning>an element of type E in language "fr" (the document
+      language specifies how language is determined)</td>
+    <td class=described><a
+      href="#lang-pseudo">The :lang()
+      pseudo-class&nbsp;</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E:enabled<br>E:disabled&nbsp;</td>
+    <td class=meaning>a user interface element E which is enabled or
+    disabled</td>
+    <td class=described><a
+      href="#UIstates">The UI element states
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:checked<br>E:indeterminate&nbsp;</td>
+    <td class=meaning>a user interface element E which is checked or in an
+      indeterminate state (for instance a radio-button or checkbox)</td>
+    <td class=described><a
+      href="#UIstates">The UI element states
+      pseudo-classes</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E:contains("foo")</td>
+    <td class=meaning>an E element containing the substring "foo" in its textual
+      contents</td>
+    <td class=described><a
+      href="#content-selectors">Content
+      pseudo-class</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E::first-line</td>
+    <td class=meaning>the first formatted line of an E element</td>
+    <td class=described><a
+      href="#first-line">The :first-line
+      pseudo-element</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E::first-letter</td>
+    <td class=meaning>the first formatted letter of an E element</td>
+    <td class=described><a
+      href="#first-letter">The :first-letter
+      pseudo-element</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E::selection</td>
+    <td class=meaning>the portion of an E element that is currently
+      selected/highlighted by the user</td>
+    <td class=described><a
+      href="#UIfragments">The UI element
+      fragments pseudo-elements</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E::before</td>
+    <td class=meaning>generated content before an E element</td>
+    <td class=described><a
+      href="#gen-content">The :before
+      pseudo-element</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E::after</td>
+    <td class=meaning>generated content after an E element</td>
+    <td class=described><a
+      href="#gen-content">The :after
+      pseudo-element</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E.warning</td>
+    <td class=meaning>an E element whose class is
+"warning" (the document language specifies how class is determined).</td>
+    <td class=described><a
+      href="#class-html">Class
+    selectors</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E#myid</td>
+    <td class=meaning>an E element with ID equal to "myid".</td>
+    <td class=described><a
+      href="#id-selectors">ID
+    selectors</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E:not(s)</td>
+    <td class=meaning>an E element that does not match simple selector s</td>
+    <td class=described><a
+      href="#negation">Negation
+      pseudo-class</a></td>
+    <td class=origin>3</td></tr>
+  <tr>
+    <td class=pattern>E F</td>
+    <td class=meaning>an F element descendant of an E element</td>
+    <td class=described><a
+      href="#descendant-combinators">Descendant
+      combinator</a></td>
+    <td class=origin>1</td></tr>
+  <tr>
+    <td class=pattern>E &gt; F</td>
+    <td class=meaning>an F element child of an E element</td>
+    <td class=described><a
+      href="#child-combinators">Child
+      combinator</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E + F</td>
+    <td class=meaning>an F element immediately preceded by an E element</td>
+    <td class=described><a
+      href="#adjacent-d-combinators">Direct
+      adjacent combinator</a></td>
+    <td class=origin>2</td></tr>
+  <tr>
+    <td class=pattern>E ~ F</td>
+    <td class=meaning>an F element preceded by an E element</td>
+    <td class=described><a
+      href="#adjacent-i-combinators">Indirect
+      adjacent combinator</a></td>
+    <td class=origin>3</td></tr></tbody></table>
+<p>The meaning of each selector is derived from the table above by
+ prepending "matches" to the contents of each cell of the "Meaning" column.
+<h2><a name=casesens>3. Case sensitivity</a></h2>
+<p>The case-sensitivity of document language element names in selectors depends
+on the document language. For example, in HTML, element names are
+case-insensitive, but in XML they are case-sensitive. 
+<p>The case-sensitivity of attribute names and attribute values in attribute
+selectors also depends on the document language.
+<h2><a name=selector-syntax>4. Selector syntax</a></h2>
+<p>A&nbsp;<dfn><a name=selector>selector</a></dfn> is a chain of one or more <a
+href="#sequence">sequences of simple
+selectors</a> separated by <a
+href="#combinators">combinators</a>. 
+<p>A&nbsp;<dfn><a name=sequence>sequence of simple selectors</a></dfn> is a chain
+  of <a
+href="#simple-selectors-dfn">simple selectors</a> that are not separated by a
+  <a
+href="#combinators">combinator</a>. It always begins with a <a
+href="#type-selectors">type selector</a> or a <a href="#universal-selector">universal
+  selector</a>. No other type selector or universal selector is allowed in the
+  sequence. 
+<p>A&nbsp;<dfn><a name=simple-selectors-dfn></a><a
+href="#simple-selectors">simple selector</a></dfn> is either a <a
+href="#type-selectors">type selector</a>, <a
+href="#universal-selector">universal selector</a>, <a
+href="#attribute-selectors">attribute selector</a>, <a href="#id-selectors">ID
+  selector</a>, <a
+href="#content-selectors">content selector</a>, or <a
+href="#pseudo-classes">pseudo-class</a>. One <a
+href="#pseudo-elements">pseudo-element</a> may be appended to the last sequence
+  of simple selectors.
+<p><dfn>Combinators</dfn> are: white space, &quot;greater-than sign&quot; (<code>&gt;</code>),
+  &quot;plus sign&quot; (<code>+</code>) and &quot;tilde&quot; (<code>~</code>).
+  White space may appear between a combinator and the simple selectors around
+  it. <a name=whitespace></a>Only the characters "space" (Unicode code 32), "tab"
+  (9), "line feed" (10), "carriage return" (13), and "form feed" (12) can occur
+  in white space. Other space-like characters, such as "em-space" (8195) and "ideographic
+  space" (12288), are never part of white space.
+<p>The elements of the document tree represented by a selector are called <dfn><a name=subject></a>subjects
+  of the selector</dfn>. A selector consisting of a single sequence of simple
+  selectors represents any element satisfying its requirements. Prepending another
+  sequence of simple selectors and a combinator to a sequence imposes additional
+  matching constraints, so the subjects of a selector are always a subset of the
+  elements represented by the rightmost sequence of simple selectors.
+<p><strong><em>Note</em></strong><em>: an empty selector, containing no sequence
+  of simple selectors and no combinator, is an <a href="#Conformance">invalid
+  selector</a>.</em>
+<h2><a name=grouping>5. Groups of selectors</a></h2>
+<p>When several selectors share the same declarations, they may be grouped into
+a comma-separated list. 
+<div class=example>CSS example(s):
+<p>In this example, we condense three rules with identical declarations into
+one. Thus, <pre>h1 { font-family: sans-serif }
+h2 { font-family: sans-serif }
+h3 { font-family: sans-serif }</pre>is equivalent to: <pre>h1, h2, h3 { font-family: sans-serif }</pre></div>
+<p><b>Warning</b>: the equivalence is true in this example because all selectors
+  are valid selectors. If just one of these selectors is invalid, the entire group
+  of selectors is invalid thus invalidating the rule for all three heading elements,
+  whereas only one of the three individual heading rules would be invalid.
+  
+<h2><a name=simple-selectors>6. Simple selectors</a></h2>
+<h3><a name=type-selectors>6.1 Type selector</a></h3>
+<p>A&nbsp;<dfn>type selector</dfn> is the name of a document language element
+type. A type selector represents an instance of the element type in the document
+tree. 
+<div class=example>Example:
+  <p>The following selector represents an <code>h1</code> element in the document
+tree: <pre>h1</pre></div>
+<h4><a name=typenmsp>6.1.1 Type selectors and Namespaces</a></h4>
+<p>Type selectors allow an optional namespace (<a href="#XMLNAMES">[XML-NAMES]</a>) component.
+  A namespace prefix that has been previously declared
+  may be prepended to the element name separated by the namespace separator
+  &quot;vertical bar&quot; (<code>|</code>). The namespace component may be left
+  empty to indicate that the selector is only to represent elements with no declared
+  namespace. Furthermore, an asterisk may be used for the namespace prefix, indicating
+  that the selector represents elements in any namespace (including elements
+  with no namespace). Element type selectors that have no namespace component
+  (no namespace separator), represent elements without regard
+  to the element's namespace (equivalent to "<code>*|</code>") unless a default
+  namespace has been declared. In that case, the selector will represent only
+  elements in the default namespace.
+<p>Note : a type selector containing a namespace prefix that has not been previously
+ declared is an <a href="#Conformance">invalid</a> selector.
+ The mechanism for declaring a namespace prefix is left up to the language
+ implementing <span class="modulename">Selectors</span>.
+ In CSS, such a mechanism is defined in the General Syntax module.
+
+<!--<p>An alternative approach would be to define element type selectors that have
+  no namespace component to match only elements that have no namespace (unless
+  a default namespace has been declared in the CSS). This would make the selector
+  "<code>h1</code>" equivalent to the selector "<code>|h1</code>" as opposed to
+  "<code>*|h1</code>". The downside to this approach is that legacy style sheets
+  (those written without any namespace constructs) will fail to match in all XML
+  documents where namespaces are used throughout, e.g. all XHTML documents. -->
+<p>It should be noted that if a namespace prefix used in a selector has not been
+  previously declared, then the selector must be considered invalid and the entire
+  style rule will be ignored in accordance with the <a href="#Conformance">standard
+  error handling rules</a>. 
+<p>It should further be noted that in a namespace aware client, element type
+selectors will only match against the <a
+href="http://www.w3.org/TR/REC-xml-names/#NT-LocalPart">local part</a> of the
+element's <a href="http://www.w3.org/TR/REC-xml-names/#ns-qualnames">qualified
+name</a>. See <a href="#downlevel">below</a>
+for notes about matching behaviors in down-level clients. 
+<p>In summary:
+<dl>
+  <dt><code>ns|E</code>
+  <dd>elements with name E in namespace ns
+  <dt><code>*|E</code>
+  <dd>elements with name E in any namespace, including those without any
+  declared namespace
+  <dt><code>|E</code>
+  <dd>elements with name E without any declared namespace
+  <dt><code>E</code>
+  <dd>if no default namespace has been specified, this is equivalent to *|E.
+  Otherwise it is equivalent to ns|E where ns is the default namespace. </dl>
+<div class=example>
+<p>CSS examples: 
+  <pre>@namespace foo url(http://www.example.com);
+
+foo|h1 { color: blue }
+
+foo|* { color: yellow }
+
+|h1 { color: red }
+
+*|h1 { color: green }
+
+h1 { color: green }</pre>
+  <p>The first rule will match only <code>h1</code> elements in the "http://www.example.com"
+    namespace. 
+  <p>The second rule will match all elements in the "http://www.example.com" namespace.
+  
+<p>The third rule will match only <code>h1</code> elements without any declared
+namespace. 
+<p>The fourth rule will match <code>h1</code> elements in any namespace (including
+those without any declared namespace).
+<p>The last rule is equivalent to the fourth rule because no default namespace
+has been defined.</div>
+<h3><a name=universal-selector>6.2 Universal selector</a> </h3>
+<p>The&nbsp;<dfn>universal selector</dfn>, written &quot;asterisk&quot; (<code>*</code>),
+  represents the qualified name of any element type. It represents then any single
+  element in the document tree in any namespace (including those without any declared
+  namespace) if no default namespace has been specified. If a default namespace
+  has been specified, see <a
+href="#univnmsp">Universal selector and Namespaces</a> below.
+<p>If the universal selector is not the only component of a sequence of simple
+selectors, the <code>*</code> may be omitted. For example: 
+<div class=example>
+<ul>
+  <li><code>*[hreflang|=en]</code> and <code>[hreflang|=en]</code> are equivalent,
+  <li><code>*.warning</code> and <code>.warning</code> are equivalent,
+  <li><code>*#myid</code> and <code>#myid</code> are equivalent. </li></ul></div>
+<p><b>Note</b>: it is recommended that the <code>*</code>, representing the
+universal selector, not be omitted.
+<h4><a name=univnmsp>6.2.1 Universal selector and Namespaces</a></h4>
+<p>The universal selector allows an optional namespace component.
+<dl>
+  <dt><code>ns|*</code>
+  <dd>all elements in namespace ns
+  <dt><code>*|*</code>
+  <dd>all elements
+  <dt><code>|*</code>
+  <dd>all elements without any declared namespace
+  <dt><code>*</code>
+  <dd>if no default namespace has been specified, this is equivalent to *|*.
+  Otherwise it is equivalent to ns|* where ns is the default namespace. </dl>
+<p>Note: a universal selector containing a namespace prefix that has not been
+ previously declared is an <a href="#Conformance">invalid</a> selector.
+ The mechanism for declaring a namespace prefix is left up to the language
+ implementing <span class="modulename">Selectors</span>.
+ In CSS, such a mechanism is defined in the General Syntax module.
+
+<h3><a name=attribute-selectors>6.3 Attribute selectors</a></h3>
+<p><span class="propernoun">Selectors</span> allow the representation of an element's attributes.
+
+
+
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-# README for a newly created project.
+# DOMJS - A Frickin' Fast Javascript DOM Framework based off of Jquery
 
 There are a couple of things you should do first, before you can use all of Git's power:
 
