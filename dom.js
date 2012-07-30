@@ -10,10 +10,10 @@
         d. HTML
             1) attr('attributeName'), returns the value of the given html tag attribute
 */          
-var _ = function(param) {
-    return _.fn.init(param);
+var $ = function(param) {
+    return $.fn.init(param);
 };
-_.fn = {
+$.fn = {
     htmlElementsList: null,
     validHtmlTags: ['button', 'input', 'form', 'label', 'article', 'p', 'div', 'header', 'nav', 'ul', 
                 'li', 'a', 'span', 'section', 'body', 'html', 'head', 'h2', 'h1', 'h3', 'h4', 'h5', 
@@ -23,20 +23,15 @@ _.fn = {
         var id, className, isValidTag;
         //run css selector engine
         if (param.charAt(0) === '#') { //Looking for an id, eg: $('#container')
-            console.log('id');
             id = param.substr(1, param.length);
             this.htmlElementsList = document.getElementById(id);
         } else if (param.charAt(0) === '.') { //Looking for class, eg: $('.current')
-            console.log('class');
             className = param.substr(1, param.length);
             this.htmlElementsList = document.getElementsByClassName(className);
-            console.log(className);
-            console.log('aok for class');
         } else { //Looking for tag, or tags, eg: $('div') or $('a,span,p')
             isValidTag = false;
             var tempList = [];
             var paramTags = param.split(',');
-            console.log(paramTags);
 
             paramTags.forEach(function (v, i, a) { //Loop through parameter tags
                 self.validHtmlTags.forEach(function (value, index, array) { //loop through list of valid tags
@@ -57,19 +52,13 @@ _.fn = {
         }
         
         return this.ret();
-
-        //this.ret();
     },
     init: function(param) {        
         if (typeof (param) === 'string') {
-            console.log(this.validHtmlTags);
             return this.selector(param);
         } else if (param === document) { //Looking for DOM object
             var documentReady = false;
             document.ready = function (callback) {
-                console.log('loading');
-                console.log(callback);
-                
                 if(document.readyState === "complete") {
                       console.log('already complete');
                       documentReady = true;
